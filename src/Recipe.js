@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import IngredientList from "./IngredientList";
-import './Recipe.css';
 import axios from "axios";
 import {Container, Row, Col, Button} from "react-bootstrap";
 import uuid from "react-uuid";

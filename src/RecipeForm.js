@@ -1,11 +1,10 @@
-import React, {useEffect, useState, useContext} from "react";
+import React, {useEffect, useState} from "react";
 import useInputState from "./hooks/useInputState";
 import axios from "axios";
 import IngredientList from "./IngredientList";
 import {withRouter} from "react-router-dom";
 import uuid from 'react-uuid';
 import {Form, Button, Container, Row, Col, Alert} from "react-bootstrap";
-import {ErrorsContext} from "./context/error.context"
 
 const emptyRecipe = {
     name: "", description: "", ingredients: []
@@ -14,25 +13,29 @@ const emptyRecipe = {
 function RecipeForm({match, history}) {
     const recipeId = match.params['recipeId'];
     const [ingredientName, setIngredientName, resetIngredientName] = useInputState('');
-    const [recipe, setRecipe] = useState({...emptyRecipe});
-    const { errorMessage, setErrorMessage, clearErrorMessage } = useContext(ErrorsContext);
+    const [errorMessage, setErrorMessage] = useState("");
+    const [recipe, setRecipe] = useState(emptyRecipe);
 
     useEffect(() => {
-        async function getData() {
+        async function fetchData() {
             const response = await axios.get(`http://localhost:8000/api/recipe/recipes/${recipeId}/`);
             let recipeData = response.data;
             recipeData.ingredients.forEach(item => item.id = uuid());
             setRecipe(recipeData);
         }
         if (recipeId) {
-            getData();
+            fetchData();
         }
     }, [recipeId]);
+
+    const clearErrorMessage = () => {
+        setErrorMessage("");
+    };
 
     const handleChange = (evt) => {
         const property_name = evt.target.name;
         const property_value = evt.target.value;
-        setRecipe({...recipe, [property_name]: property_value})
+        setRecipe({...recipe, [property_name]: property_value});
     };
 
     const addIngredient = (evt) => {

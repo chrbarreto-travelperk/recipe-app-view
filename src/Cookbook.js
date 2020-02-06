@@ -3,6 +3,7 @@ import Link from "react-router-dom/Link";
 import axios from "axios";
 import {Container, Row, Button, Col, Form} from "react-bootstrap";
 import useInputState from "./hooks/useInputState";
+import RecipeList from "./RecipeList";
 
 function Cookbook(){
 
@@ -39,15 +40,7 @@ function Cookbook(){
                     </Link>
                 </Col>
             </Row>
-            <Row>
-                 {recipeList.map(recipeItem => (
-                     <Col key={recipeItem.id} xs={12}>
-                        <Link to={`/recipe/view/${recipeItem.id}`}>
-                            {recipeItem.name}
-                        </Link>
-                     </Col>
-                ))}
-            </Row>
+            <RecipeList recipeList={recipeList} />
         </Container>
     )
 }
